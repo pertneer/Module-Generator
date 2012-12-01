@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="stylesheet" href="creator.css" type="text/css" />
+	<title>Module Generator</title>
+	<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="modx_functions.js"></script>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+</head>
+
+<body class="mods modx-creator">
+
+<div id="wrap">
+	<a id="top" name="top" accesskey="t"></a>
+<form action="./acp_module_generator.php" method="post" id="generatorform" enctype="multipart/form-data">
+	<div id="page-header">
+		<span class="side-left"></span>
+		<div class="header" style="position: relative;">
+			<h1>ACP/MCP/UCP Module Generator</h1>
+			<div align="center"><h3><span style="color:#ff0000;">Note:</span> This only is to generate the needed files in their correct location to add an ACP module, MCP module, or a UCP module<br /> Addition information must be added to files to make them function</h3></div>
+			<!-- IF S_ERRORS --><div id="error-div">There were errors. Recheck the fields marked with red.</div><!-- ENDIF -->
+			<!-- IF S_WARNINGS --><div id="warning-div">There were warnings. Recheck the fields marked with yellow.</div><!-- ENDIF -->
+		</div>
+		<span class="side-right"></span>
+	</div>
+
+	<div id="page-body">
+
+	<div class="panel">
+		<div class="inner"><span class="corners-top"><span></span></span>
+			<h3>About the MOD</h3>
+			<fieldset class="fields2">
+				<!-- begin mod title -->
+				<dl id="title-field"<!-- IF S_ERROR_TITLE --> class="error-dl"<!-- ENDIF -->>
+					<dd id="help-title" class="modx-help" style="display: none;">This is the name of the module.</dd>
+					<dt>
+						<label for="title">Title:*</label>
+						<img class="sign" src="./images/info.png" alt="Info icon" title="This is the name of the module." />
+					</dt>
+					<!-- BEGIN title_row -->
+					<dd id="{title_row.FIELD_ID}">
+						<input class="inputbox medium" type="text" name="title[{title_row.FIELD_ID}][title]"<!-- IF title_row.S_ROW_COUNT == 0 --> id="title"<!-- ENDIF --> size="53" maxlength="255" value="{title_row.VALUE}" />
+						<!-- IF title_row.S_ROW_COUNT > 0 --><img class="action-image" src="./images/delete.png" alt="Delete" onclick="$('#{title_row.FIELD_ID}').remove()" /><!-- ENDIF -->
+					</dd>
+					<!-- BEGINELSE -->
+					<dd>
+						<input class="inputbox medium" type="text" name="title[title_pre][title]" id="title" size="53" maxlength="255" value="" />
+					</dd>
+					<!-- END title_row -->
+				</dl>
+				<!-- end mod title -->
+
+				<dl>
+					<dt<!-- IF S_ERROR_VERSION --> class="error-dl"<!-- ENDIF -->>
+						<label for="package">Package:*</label>
+						
+					</dt>
+					<dd><select name="title[title_pre][package]">{PACKAGE_SELECT}</select></dd>
+				</dl>
+				<!-- begin mod version -->
+				<dl<!-- IF S_ERROR_VERSION --> class="error-dl"<!-- ENDIF -->>
+					<dt>
+						<label for="version">MOD version:*</label>
+						<img class="sign" src="./images/info.png" alt="Info icon" title="All versions less than 1.0.0 are development versions." />
+					</dt>
+					<dd><input class="inputbox autowidth" type="text" name="version" id="version" size="10" maxlength="25" value="{MOD_VERSION}" /></dd>
+				</dl>
+				<!-- end mod version -->
+
+				<!-- begin phpBB version -->
+				<dl<!-- IF S_ERROR_TARGET --> class="error-dl"<!-- ELSEIF S_WARNING_TARGET --> class="warning-dl"<!-- ENDIF -->>
+					<dt>
+						<label for="target">phpBB version:*</label>
+						<img class="sign" src="./images/info.png" alt="Info icon" title="Version of phpBB for which the MOD was developed. This should be an exact version, for example 3.0.5." />
+					</dt>
+					<dd>
+						<input class="inputbox autowidth" type="text" name="target" id="target" size="10" maxlength="25" value="{TARGET_VERSION}" />
+						The latest phpBB version is: {PHPBB_LATEST}
+					</dd>
+				</dl>
+				<!-- end phpBB version -->
+
+			</fieldset>
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+
+	<div class="panel bg2">
+		<div class="inner"><span class="corners-top"><span></span></span>
+			<!-- begin Author fields -->
+				<h3>About the author(s)</h3>
+				<div id="authors">
+					<!-- BEGIN author_row -->
+					<fieldset class="modx-level1 fields2" id="{author_row.FIELD_ID}_a">
+						<dl>
+							<dt class="author-rows"><label for="author-{author_row.FIELD_ID}-username">Username:*</label></dt>
+							<dd class="author-rows">
+								<input class="inputbox autowidth" type="text" name="author[{author_row.FIELD_ID}][username]" id="author-{author_row.FIELD_ID}-username" size="40" maxlength="255" value="{author_row.USERNAME}" />
+								<!-- IF author_row.S_ROW_COUNT > 0 --><img class="action-image" src="./images/delete.png" alt="" onclick="$('#{author_row.FIELD_ID}_a').remove()" /><!-- ENDIF -->
+							</dd>
+						</dl>
+						<dl>
+							<dt class="author-rows"><label for="author-{author_row.FIELD_ID}-email">E-mail:</label></dt>
+							<dd class="author-rows">
+								<input class="inputbox autowidth" type="text" name="author[{author_row.FIELD_ID}][email]" id="author-{author_row.FIELD_ID}-email" size="40" maxlength="255" value="{author_row.EMAIL}" />
+							</dd>
+						</dl>
+						<div id="{author_row.FIELD_ID}-pre">
+						</div>
+						<input class="button2" type="button" value="Add contribution" onclick="add_contributor('{author_row.FIELD_ID}');" />
+						<!-- IF author_row.S_ROW_COUNT > 0 --><img class="sign" src="./images/info.png" alt="Info icon" title="The contributor fields are optional and every author can have several contributor fields. If you choose to add contributor fields, the only field required is the status. The others are optional." /><!-- ENDIF -->
+					</fieldset>
+					<!-- BEGINELSE -->
+					<fieldset class="modx-level1 fields2">
+						<dl<!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>
+							<dt class="author-rows"><label for="author-afield-username">Username:*</label></dt>
+							<dd class="author-rows">
+								<input class="inputbox autowidth" type="text" name="author[afield][username]" id="author-afield-username" size="40" maxlength="255" value="" />
+							</dd>
+						</dl>
+						<dl>
+							<dt class="author-rows"><label for="author-afield-email">E-mail:</label></dt>
+							<dd class="author-rows"><input class="inputbox autowidth" type="text" name="author[afield][email]" id="author-afield-email" size="40" maxlength="255" value="" /></dd>
+						</dl>
+						
+					</fieldset>
+					<!-- END author_row -->
+				</div>
+				
+			<!-- end Author fields -->
+		<span class="corners-bottom"><span></span></span></div>
+	</div>
+</div>
+<div id="page-footer">
+
+		<fieldset class="submit-buttons">
+
+			<!-- BEGIN meta_row -->
+				<input type="hidden" name="meta[{meta_row.FIELD_ID}][name]" value="{meta_row.NAME}" />
+				<input type="hidden" name="meta[{meta_row.FIELD_ID}][content]" value="{meta_row.CONTENT}" />
+				
+			<!-- END meta_row -->
+
+			<input class="button1" type="submit" name="submit" value="submit" onclick="this.form.target='_self';" />
+		</fieldset>
+	</form>
+
+	<span class="fcorners-bottom"><span></span></span>
+	</div>
+</div>
+</body>
+</html>

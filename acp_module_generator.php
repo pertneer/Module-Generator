@@ -180,7 +180,13 @@ if($submit)
 	<div>Action: {U_ACTION}</div>
 
 	<!-- INCLUDE overall_footer.html -->";
-	$path = array('root','adm', 'style');
+	//add check for acp
+	if($packagename == 'acp')
+	{
+		$path = array('root','adm', 'style');
+	}else{
+		$path = array('root','styles','prosilver','template');
+	}
 	$message .= create_path($path);
 	$message .= output_file($html_content, $packagename . '_' . $template_name . '.html', implode('/', $path) . '/' );
 

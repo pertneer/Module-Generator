@@ -11,6 +11,7 @@ include('./constants.php');
 include('./functions.php');
 include('./template.php');
 $debug = false;
+$Year = strftime("%Y", time());
 
 // The get the post vars
 if(isset($_POST['submit'])){
@@ -64,7 +65,7 @@ if($submit)
 	*
 	* @package ' . $packagename .'
 	* @version $Id: $
-	* @copyright (c) 2008 ' . $copyright_holder .'
+	* @copyright (c) ' .$Year . ' ' . $copyright_holder .'
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
 
@@ -79,16 +80,34 @@ if($submit)
 	/**
 	* @package '. $packagename .'
 	*/
-	class ' . $classname .'
+	class ' . $packagename .'_' . $classname .'
 	{
 		var $u_action;
 		var $tpl_path;
-		var $page_title;
 
 		function main($id, $mode)
 		{
-			$this->page_title	= \'' . $title .'\';
-			$this->tpl_name		= $user->lang[\'' . $template_name .'\'];
+			global $db, $user, $auth, $template;
+			global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+			switch($mode)
+			{
+				case \'index\':
+					$this->page_title	= \'' . strtoupper($packagename) . '_' . $title .'\';
+					$this->tpl_name		= \'' . $packagename . '_' . $template_name .'\';
+				break;
+			}
+			
+			
+			$error = array();
+			$template->assign_vars(array(
+				\'L_TITLE\'			=> $user->lang[\'' . strtoupper($packagename) . '_' . strtoupper($classname) . '_TITLE\'],
+				\'L_TITLE_EXPLAIN\'	=> $user->lang[\''. strtoupper($packagename) . '_' . strtoupper($classname) . '_TITLE_EXPLAIN\'],
+
+				\'S_ERROR\'			=> (sizeof($error)) ? true : false,
+				\'ERROR_MSG\'			=> implode(\'<br />\', $error),
+
+				\'U_ACTION\'			=> $this->u_action)
+			);
 		}
 	}';
 
@@ -102,18 +121,26 @@ if($submit)
 	// includes/{MODULECLASS}/info/$classname.php
 	$info_content = "<?php
 	/**
+	*
+	* @package " . $packagename .'
+	* @version $Id: $
+	* @copyright (c) ' .$Year . " " . $copyright_holder ."
+	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
+	*/
+	
+	/**
 	* @package $packagename
 	*/
-	class " . $classname ."_info
+	class " . $packagename . '_' . $classname ."_info
 	{
 		function module()
 		{
 			return array(
-				'filename'		=> '$classname',
-				'title'			=> '$title',
+				'filename'		=> '" . $packagename . "_" . $classname . "',
+				'title'			=> '" . strtoupper($packagename) . "_" . $title . "',
 				'version'		=> '$version',
 				'modes'			=> array(
-					'default'		=> array('title' => '" . strtoupper($packagename) . "_" . $title . "_TITLE', 'auth' => 'acl_a_foo', 'cat' => array('" . strtoupper($packagename) . "_" . $title . "')),
+					'index'		=> array('title' => '" . strtoupper($packagename) . "_" . $title . "_TITLE', 'auth' => 'acl_a_', 'cat' => array('')),
 					
 				),
 			);
@@ -135,19 +162,29 @@ if($submit)
 	// Template file
 
 	// adm/style/$template_name.html
-	$html_content =  "<!-- INCLUDE acp_header.html -->
+	$html_content =  "<!-- INCLUDE overall_header.html -->
 
-	Hello, World!
+	<div>Title: {L_TITLE}</div>
+	<div>Title: {L_TITLE_EXPLAIN}</div>
+	<div>Action: {U_ACTION}</div>
 
-	<!-- INCLUDE acp_footer.html -->";
+	<!-- INCLUDE overall_footer.html -->";
 	$path = array('root','adm', 'style');
 	$message .= create_path($path);
-	$message .= output_file($html_content, $template_name . '.html', implode('/', $path) . '/' );
+	$message .= output_file($html_content, $packagename . '_' . $template_name . '.html', implode('/', $path) . '/' );
 
 	// Language file
 
 	// language/en/mods/info_$classname.php
 	$lang_content = '<?php
+		/**
+	*
+	* @package ' . $packagename .'
+	* @version $Id: $
+	* @copyright (c) ' .$Year . ' ' . $copyright_holder .'
+	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
+	*/
+	
 	/**
 	* DO NOT CHANGE
 	*/
@@ -168,12 +205,13 @@ if($submit)
 	// in a url you again do not need to specify an order e.g., \'Click %sHERE%s\' is fine
 
 	$lang = array_merge($lang, array(
-		\'' . strtoupper($packagename) . '_' . $title . '_TITLE\'                        => \'' . str_replace('_', ' ', $title) . ' Index\',
+		\'' . strtoupper($packagename) . '_' . $title . '_TITLE\'						=> \'' . str_replace('_', ' ', $title) . ' Index\',
+		\'' . strtoupper($packagename) . '_' . $title . '_TITLE_EXPLAIN\'				=> \'' . str_replace('_', ' ', $title) . ' explain\',
 	));';
 
 	$path = array('root', 'language', $language, 'mods');
 	$message .= create_path($path);
-	$message .= output_file($lang_content, 'info_' . $classname . '.php', implode('/', $path) . '/' );
+	$message .= output_file($lang_content, 'info_' . $packagename . '_'. $classname . '.php', implode('/', $path) . '/' );
 
 	//permimssion file
 	
@@ -181,7 +219,7 @@ if($submit)
 	$perm_content = '<?php
 /** 
 * @package language(permissions)
-* @copyright (c) 2012 ' . $copyright_holder . '
+* @copyright (c) ' .$Year . ' ' . $copyright_holder . '
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 */
 
@@ -203,7 +241,7 @@ $lang = array_merge($lang, array(
 ));
 // Administrator Permissions
 $lang = array_merge($lang, array(
-	\'acl_a_' . $classname . 'manage\'			=> array(\'lang\' => \'Can change ' . $classname . ' settings\', \'cat\' => \''.$classname.'\'),
+	\'acl_a_' . $classname . '_manage\'			=> array(\'lang\' => \'Can change ' . $classname . ' settings\', \'cat\' => \''.$classname.'\'),
 ));';
 	$path = array('root', 'language', $language, $packagename);
 	$message .= create_path($path);

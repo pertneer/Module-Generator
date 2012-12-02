@@ -2,7 +2,7 @@
 /**
 * @package module_generator
 * copied from MODX creator 
-* @version Ver_0.0.1
+* @version Ver_1.0.0
 * @copyright (c) 2009 phpBB Group
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *

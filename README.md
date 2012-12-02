@@ -8,6 +8,6 @@ When completed this will create an ACP Module, MCP Module, or a UCP Module. Thes
 
 Although you will need to add all of you needed code for your modification after it is generated.
 
-**Note:** This is still very rough and not functioning at this point.
+**Note:** This is still very rough and only ACP is functioning at this point.
 
 I used the [MODx creator offline](https://github.com/phpbb/modx_creator_offline) as a starting point, so credit for this code goes to the [phpBB group](https://www.phpbb.com/)

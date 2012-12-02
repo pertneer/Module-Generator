@@ -1,4 +1,11 @@
 <?php
+/**
+* @package module_generator
+* @version Ver_0.0.1
+* @copyright (c) 2012 Pertneer
+* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
+*/
+
 $zipName = base64_decode($_GET['zip']);
 
 header('Content-type: application/zip');

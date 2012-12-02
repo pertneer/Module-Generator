@@ -1,4 +1,11 @@
 <?php
+/**
+* @package module_generator
+* @version Ver_0.0.1
+* @copyright (c) 2012 Pertneer
+* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
+*/
+
 /** Sample Usage
 * 1st_dir/2nd_dir/3rd_dir/
 * $path = array('1st_dir', '2nd_dir', '3rd_dir');

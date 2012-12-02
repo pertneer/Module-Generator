@@ -1,7 +1,7 @@
 <?php
 /**
 * @package module_generator
-* @version $Id: $
+* @version Ver_0.0.1
 * @copyright (c) 2012 Pertneer
 * @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 */

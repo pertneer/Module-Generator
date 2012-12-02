@@ -76,7 +76,7 @@ if($submit)
 	*
 	* @package ' . $packagename .'
 	* @version $Id: $
-	* @copyright (c) ' .$Year . ' ' . $copyright_holder .'
+	* @copyright (c) ' .$Year . ' ' . $copyright_holder . ' ' . $email . '
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
 
@@ -135,7 +135,7 @@ if($submit)
 	*
 	* @package " . $packagename .'
 	* @version $Id: $
-	* @copyright (c) ' .$Year . " " . $copyright_holder ."
+	* @copyright (c) ' .$Year . " " . $copyright_holder ." " . $email . "
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
 	
@@ -192,7 +192,7 @@ if($submit)
 	*
 	* @package ' . $packagename .'
 	* @version $Id: $
-	* @copyright (c) ' .$Year . ' ' . $copyright_holder .'
+	* @copyright (c) ' .$Year . ' ' . $copyright_holder .' ' . $email . '
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
 	
@@ -230,7 +230,7 @@ if($submit)
 	$perm_content = '<?php
 /** 
 * @package language(permissions)
-* @copyright (c) ' .$Year . ' ' . $copyright_holder . '
+* @copyright (c) ' .$Year . ' ' . $copyright_holder . ' ' . $email . '
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 */
 

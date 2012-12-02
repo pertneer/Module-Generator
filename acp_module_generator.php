@@ -16,20 +16,31 @@ $Year = strftime("%Y", time());
 // The get the post vars
 if(isset($_POST['submit'])){
 //$submit = $_POST['pertneer'];
-echo 'Title: '. $_POST['title']['title_pre']['title'] .'<br />';
-echo 'Package: '. $_POST['title']['title_pre']['package'] .'<br />';
-echo 'Username: '. $_POST['author']['afield']['username'] .'<br />';
-echo 'Email: '. $_POST['author']['afield']['email'] .'<br />';
-echo 'Version: '. $_POST['version'] . '<br />';
-echo 'Target: '. $_POST['target'] . '<br />';
+//echo 'Title: '. $_POST['title']['title_pre']['title'] .'<br />';
+//echo 'Package: '. $_POST['title']['title_pre']['package'] .'<br />';
+//echo 'Username: '. $_POST['author']['afield']['username'] .'<br />';
+//echo 'Email: '. $_POST['author']['afield']['email'] .'<br />';
+//echo 'Version: '. $_POST['version'] . '<br />';
+//echo 'Target: '. $_POST['target'] . '<br />';
 }else{
 	$submit = '';
 }
-$classname			= strtolower(str_replace(' ', '_', $_POST['title']['title_pre']['title'])); // Same as filename, without extension. Example: acp_foobar.
-$packagename		= strtolower($_POST['title']['title_pre']['package']); // Either acp, mcp or ucp.
-$copyright_holder	= $_POST['author']['afield']['username']; // Your name
-$email				= $_POST['author']['afield']['email']; // author email
-$version			= $_POST['version']; // The module's version
+
+if(isset($_POST['submit'])){
+	$classname			= strtolower(str_replace(' ', '_', $_POST['title']['title_pre']['title'])); // Same as filename, without extension. Example: acp_foobar.
+	$packagename		= strtolower($_POST['title']['title_pre']['package']); // Either acp, mcp or ucp.
+	$copyright_holder	= $_POST['author']['afield']['username']; // Your name
+	$email				= $_POST['author']['afield']['email']; // author email
+	$version			= $_POST['version']; // The module's version
+}else{
+	$classname			= '';
+	$packagename		= '';
+	$copyright_holder	= '';
+	$email				= '';
+	$version			= '';
+}
+
+
 $modes				= array(); // array of modes
 $title				= strtoupper($classname); // The title (language string)
 $template_name		= $classname; // Name of template file "acp_name" for "acp_name.html"

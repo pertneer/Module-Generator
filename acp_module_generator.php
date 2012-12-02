@@ -230,10 +230,12 @@ if($submit)
 	$message .= create_path($path);
 	$message .= output_file($lang_content, 'info_' . $packagename . '_'. $classname . '.php', implode('/', $path) . '/' );
 
-	//permimssion file
+	if($packagename == 'acp')
+	{
+		//permimssion file
 	
-	//language/en/acp/permissions_my_mod.php
-	$perm_content = '<?php
+		//language/en/acp/permissions_my_mod.php
+		$perm_content = '<?php
 /** 
 * @package language(permissions)
 * @version ' . $version . '
@@ -261,12 +263,13 @@ $lang = array_merge($lang, array(
 $lang = array_merge($lang, array(
 	\'acl_a_' . $classname . '_manage\'			=> array(\'lang\' => \'Can change ' . $classname . ' settings\', \'cat\' => \''.$classname.'\'),
 ));';
-	$path = array('root', 'language', $language, $packagename);
-	$message .= create_path($path);
-	$message .= output_file($perm_content, 'permissions_' . $classname . '.php', implode('/', $path) . '/' );
-	
-	
-	
+
+		$path = array('root', 'language', $language, $packagename);
+		$message .= create_path($path);
+		$message .= output_file($perm_content, 'permissions_' . $classname . '.php', implode('/', $path) . '/' );
+	}
+
+
 $zipName = str_replace('_', '', $classname);
 $zipName = $zipName .'.zip';
 Zip('root/', $zipName );

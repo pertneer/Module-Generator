@@ -12,6 +12,11 @@ include('./functions.php');
 include('./template.php');
 $debug = false;
 $Year = strftime("%Y", time());
+$debugInfo = '';
+
+if($debug == true){
+	$debugInfo = serialize($_POST);
+}
 
 // The get the post vars
 if(isset($_POST['submit'])){
@@ -32,12 +37,14 @@ if(isset($_POST['submit'])){
 	$copyright_holder	= $_POST['author']['afield']['username']; // Your name
 	$email				= $_POST['author']['afield']['email']; // author email
 	$version			= $_POST['version']; // The module's version
+	$target				= $_POST['target'];
 }else{
 	$classname			= '';
 	$packagename		= '';
 	$copyright_holder	= '';
 	$email				= '';
 	$version			= '';
+	$target				= '';
 }
 
 
@@ -76,6 +83,7 @@ if($submit)
 	*
 	* @package ' . $packagename .'
 	* @version ' . $version . '
+	* @targetversion ' . $target . '
 	* @copyright (c) ' .$Year . ' ' . $copyright_holder . ' ' . $email . '
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
@@ -135,6 +143,7 @@ if($submit)
 	*
 	* @package " . $packagename .'
 	* @version ' . $version . '
+	* @targetversion ' . $target . '
 	* @copyright (c) ' .$Year . " " . $copyright_holder ." " . $email . "
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
@@ -198,6 +207,7 @@ if($submit)
 	*
 	* @package ' . $packagename .'
 	* @version ' . $version . '
+	* @targetversion ' . $target . '
 	* @copyright (c) ' .$Year . ' ' . $copyright_holder .' ' . $email . '
 	* @license http://opensource.org/licenses/gpl-license.php GNU General Public License
 	*/
@@ -239,6 +249,7 @@ if($submit)
 /** 
 * @package language(permissions)
 * @version ' . $version . '
+* @targetversion ' . $target . '
 * @copyright (c) ' .$Year . ' ' . $copyright_holder . ' ' . $email . '
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 */
@@ -269,6 +280,9 @@ $lang = array_merge($lang, array(
 		$message .= output_file($perm_content, 'permissions_' . $classname . '.php', implode('/', $path) . '/' );
 	}
 
+if($debug == true){
+	output_file($debugInfo, 'debug.php', 'root/');
+}
 
 $zipName = str_replace('_', '', $classname);
 $zipName = $zipName .'.zip';

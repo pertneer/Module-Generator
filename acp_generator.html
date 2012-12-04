@@ -33,10 +33,10 @@
 			<h3>About the MOD</h3>
 			<fieldset class="fields2">
 				<!-- begin mod title -->
-				<dl id="title-field"<!-- IF S_ERROR_TITLE --> class="error-dl"<!-- ENDIF -->>
+				<dl id="title-field">
 					<dd id="help-title" class="modx-help" style="display: none;">This is the name of the module.</dd>
 					<dt>
-						<label for="title">Title:*</label>
+						<label for="title" <!-- IF S_ERROR_TITLE --> class="error-dl"<!-- ENDIF -->>Title:*</label>
 						<img class="sign" src="./images/info.png" alt="Info icon" title="This is the name of the module." />
 					</dt>
 					<!-- BEGIN title_row -->
@@ -53,16 +53,16 @@
 				<!-- end mod title -->
 
 				<dl>
-					<dt<!-- IF S_ERROR_VERSION --> class="error-dl"<!-- ENDIF -->>
-						<label for="package">Package:*</label>
+					<dt>
+						<label for="package" <!-- IF S_ERROR_PACKAGE --> class="error-dl"<!-- ENDIF -->>Package:*</label>
 						
 					</dt>
 					<dd><select name="title[title_pre][package]">{PACKAGE_SELECT}</select></dd>
 				</dl>
 				<!-- begin mod version -->
-				<dl<!-- IF S_ERROR_VERSION --> class="error-dl"<!-- ENDIF -->>
+				<dl>
 					<dt>
-						<label for="version">MOD version:*</label>
+						<label for="version" <!-- IF S_ERROR_VERSION --> class="error-dl"<!-- ENDIF -->>MOD version:*</label>
 						<img class="sign" src="./images/info.png" alt="Info icon" title="All versions less than 1.0.0 are development versions." />
 					</dt>
 					<dd><input class="inputbox autowidth" type="text" name="version" id="version" size="10" maxlength="25" value="{MOD_VERSION}" /></dd>
@@ -72,7 +72,7 @@
 				<!-- begin phpBB version -->
 				<dl<!-- IF S_ERROR_TARGET --> class="error-dl"<!-- ELSEIF S_WARNING_TARGET --> class="warning-dl"<!-- ENDIF -->>
 					<dt>
-						<label for="target">phpBB version:*</label>
+						<label for="target">phpBB version:</label>
 						<img class="sign" src="./images/info.png" alt="Info icon" title="Version of phpBB for which the MOD was developed. This should be an exact version, for example 3.0.5." />
 					</dt>
 					<dd>
@@ -94,7 +94,7 @@
 					<!-- BEGIN author_row -->
 					<fieldset class="modx-level1 fields2" id="{author_row.FIELD_ID}_a">
 						<dl>
-							<dt class="author-rows"><label for="author-{author_row.FIELD_ID}-username">Username:*</label></dt>
+							<dt class="author-rows"><label for="author-{author_row.FIELD_ID}-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label></dt>
 							<dd class="author-rows">
 								<input class="inputbox autowidth" type="text" name="author[{author_row.FIELD_ID}][username]" id="author-{author_row.FIELD_ID}-username" size="40" maxlength="255" value="{author_row.USERNAME}" />
 								<!-- IF author_row.S_ROW_COUNT > 0 --><img class="action-image" src="./images/delete.png" alt="" onclick="$('#{author_row.FIELD_ID}_a').remove()" /><!-- ENDIF -->
@@ -113,8 +113,8 @@
 					</fieldset>
 					<!-- BEGINELSE -->
 					<fieldset class="modx-level1 fields2">
-						<dl<!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>
-							<dt class="author-rows"><label for="author-afield-username">Username:*</label></dt>
+						<dl>
+							<dt class="author-rows"><label for="author-afield-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label></dt>
 							<dd class="author-rows">
 								<input class="inputbox autowidth" type="text" name="author[afield][username]" id="author-afield-username" size="40" maxlength="255" value="" />
 							</dd>

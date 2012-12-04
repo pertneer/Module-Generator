@@ -94,7 +94,12 @@
 					<!-- BEGIN author_row -->
 					<fieldset class="modx-level1 fields2" id="{author_row.FIELD_ID}_a">
 						<dl>
-							<dt class="author-rows"><label for="author-{author_row.FIELD_ID}-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label></dt>
+							<dt>
+							<label for="author-{author_row.FIELD_ID}-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label>
+							<img class="sign" src="./images/info.png" alt="Info icon" title="phpBB.com username is preferred" />
+							</dt>
+							
+							
 							<dd class="author-rows">
 								<input class="inputbox autowidth" type="text" name="author[{author_row.FIELD_ID}][username]" id="author-{author_row.FIELD_ID}-username" size="40" maxlength="255" value="{author_row.USERNAME}" />
 								<!-- IF author_row.S_ROW_COUNT > 0 --><img class="action-image" src="./images/delete.png" alt="" onclick="$('#{author_row.FIELD_ID}_a').remove()" /><!-- ENDIF -->
@@ -106,15 +111,15 @@
 								<input class="inputbox autowidth" type="text" name="author[{author_row.FIELD_ID}][email]" id="author-{author_row.FIELD_ID}-email" size="40" maxlength="255" value="{author_row.EMAIL}" />
 							</dd>
 						</dl>
-						<div id="{author_row.FIELD_ID}-pre">
-						</div>
-						<input class="button2" type="button" value="Add contribution" onclick="add_contributor('{author_row.FIELD_ID}');" />
-						<!-- IF author_row.S_ROW_COUNT > 0 --><img class="sign" src="./images/info.png" alt="Info icon" title="The contributor fields are optional and every author can have several contributor fields. If you choose to add contributor fields, the only field required is the status. The others are optional." /><!-- ENDIF -->
+						
 					</fieldset>
 					<!-- BEGINELSE -->
 					<fieldset class="modx-level1 fields2">
 						<dl>
-							<dt class="author-rows"><label for="author-afield-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label></dt>
+							<dt class="author-rows">
+							<label for="author-afield-username" <!-- IF S_ERROR_AUTHOR --> class="error-dl"<!-- ENDIF -->>Username:*</label>
+							<img class="sign" src="./images/info.png" alt="Info icon" title="phpBB.com username is preferred" />
+							</dt>
 							<dd class="author-rows">
 								<input class="inputbox autowidth" type="text" name="author[afield][username]" id="author-afield-username" size="40" maxlength="255" value="" />
 							</dd>

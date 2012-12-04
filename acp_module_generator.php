@@ -10,10 +10,10 @@ define('IN_ACP_GEN', true);
 include('./constants.php');
 include('./functions.php');
 include('./template.php');
-$debug = false;
+$debug = true;
 $Year = strftime("%Y", time());
 $debugInfo = '';
-
+$error = array();
 if($debug == true){
 	$debugInfo = serialize($_POST);
 }
@@ -30,23 +30,49 @@ if(isset($_POST['submit'])){
 }else{
 	$submit = '';
 }
+$classname			= '';
+$packagename		= '';
+$copyright_holder	= '';
+$version			= '';
 
 if(isset($_POST['submit'])){
-	$classname			= strtolower(str_replace(' ', '_', $_POST['title']['title_pre']['title'])); // Same as filename, without extension. Example: acp_foobar.
-	$packagename		= strtolower($_POST['title']['title_pre']['package']); // Either acp, mcp or ucp.
-	$copyright_holder	= $_POST['author']['afield']['username']; // Your name
-	$email				= $_POST['author']['afield']['email']; // author email
-	$version			= $_POST['version']; // The module's version
-	$target				= $_POST['target'];
-}else{
-	$classname			= '';
-	$packagename		= '';
-	$copyright_holder	= '';
-	$email				= '';
-	$version			= '';
-	$target				= '';
-}
 
+	//check for errors
+	if((isset($_POST['title']['title_pre']['title']) && $_POST['title']['title_pre']['title'] != '') && (isset($_POST['title']['title_pre']['package']) && $_POST['title']['title_pre']['package'] != '') && (isset($_POST['author']['afield']['username']) && $_POST['author']['afield']['username'] != '') && (isset($_POST['version']) && $_POST['version'] != ''))
+	{
+		$classname			= strtolower(str_replace(' ', '_', $_POST['title']['title_pre']['title'])); // Same as filename, without extension. Example: acp_foobar.
+		$packagename		= strtolower($_POST['title']['title_pre']['package']); // Either acp, mcp or ucp.
+		$copyright_holder	= $_POST['author']['afield']['username']; // Your name
+		$email				= $_POST['author']['afield']['email']; // author email
+		$version			= $_POST['version']; // The module's version
+		$target				= $_POST['target'];
+		$error['title'] 	= '';
+		$error['package']	= '';
+		$error['author']	= '';
+		$error['version']	= '';
+	}
+	else
+	{
+		if($_POST['title']['title_pre']['title'] == ''){
+			$classname			= '';
+			$error['title']='Need a name for project';
+		}
+		if($_POST['title']['title_pre']['package'] == ''){
+			$packagename		= '';
+			$error['package']='This should never happen';
+		}
+		if($_POST['author']['afield']['username'] == ''){
+			$copyright_holder	= '';
+			$error['author']='Author of the project is required';
+		}
+		if( $_POST['version'] == ''){
+			$version			= '';
+			$error['version']='Version number is required';
+		}
+		$email				= '';
+		$target				= '';
+	}
+}
 
 $modes				= array(); // array of modes
 $title				= strtoupper($classname); // The title (language string)
@@ -58,7 +84,7 @@ $message = '';
 $template = new template();
 $template->set_custom_template('.', 'default');
 
-if($submit)
+if($submit && !$error)
 {
 	// Check that it's a valid version number
 	if ($version == '')
@@ -307,7 +333,7 @@ $template->assign_vars(array(
 	'PHPBB_LATEST' => PHPBB_LATEST,
 
 	'S_ERROR_TITLE' => (isset($error['title'])) ? true : false,
-	'S_ERROR_DESC' => (isset($error['desc'])) ? true : false,
+	'S_ERROR_PACKAGE' => (isset($error['package'])) ? true : false,
 	'S_ERROR_VERSION' => (isset($error['version'])) ? true : false,
 	'S_ERROR_TARGET' => (isset($error['target'])) ? true : false,
 	'S_ERROR_INSTALL_LEVEL' => (isset($error['install_level'])) ? true : false,

@@ -50,6 +50,7 @@ if(isset($_POST['submit'])){
 		$error['package']	= '';
 		$error['author']	= '';
 		$error['version']	= '';
+		$error['error']		= false;
 	}
 	else
 	{
@@ -84,7 +85,7 @@ $message = '';
 $template = new template();
 $template->set_custom_template('.', 'default');
 
-if($submit && !$error)
+if($submit && $error['error'] == false)
 {
 	// Check that it's a valid version number
 	if ($version == '')
@@ -306,6 +307,136 @@ $lang = array_merge($lang, array(
 		$message .= output_file($perm_content, 'permissions_' . $classname . '.php', implode('/', $path) . '/' );
 	}
 
+$install_content = '<?php
+/**
+* @author Unknown Bliss (Michael Cullum of http://unknownbliss.co.uk)
+* @package umil
+* @copyright (c) 2008 phpBB Group
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+
+/**
+* @ignore
+*/
+define(\'UMIL_AUTO\', true);
+define(\'IN_PHPBB\', true);
+define(\'IN_INSTALL\', true);
+
+$phpbb_root_path = (defined(\'PHPBB_ROOT_PATH\')) ? PHPBB_ROOT_PATH : \'../\';
+$phpEx = substr(strrchr(__FILE__, \'.\'), 1);
+include($phpbb_root_path . \'common.\' . $phpEx);
+
+$user->session_begin();
+$auth->acl($user->data);
+$user->setup(\'mods/kb\');
+
+$auth_settings = array();
+if (!file_exists($phpbb_root_path . \'umil/umil_auto.\' . $phpEx))
+{
+	trigger_error(\'Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>\', E_USER_ERROR);
+}
+
+// Some blog files we need
+//require \"{$phpbb_root_path}includes/mods/constants_blog.$phpEx\";
+
+// The name of the mod to be displayed during installation.
+$mod_name = \'' . $classname . '\';
+
+/*
+* The name of the config variable which will hold the currently installed version
+* You do not need to set this yourself, UMIL will handle setting and updating the version itself.
+*/
+$version_config_name = \'' . $classname . '_version\';
+
+/*
+* The language file which will be included when installing
+* Language entries that should exist in the language file for UMIL (replace $mod_name with the mod\'s name you set to $mod_name above)
+*/
+$language_file = \'mods/' . $classname . '\';
+
+/*
+* Options to display to the user (this is purely optional, if you do not need the options you do not have to set up this variable at all)
+* Uses the acp_board style of outputting information, with some extras (such as the \'default\' and \'select_user\' options)
+*/
+
+
+/*
+* Optionally we may specify our own logo image to show in the upper corner instead of the default logo.
+* $phpbb_root_path will get prepended to the path specified
+* Image height should be 50px to prevent cut-off or stretching.
+*/
+//$logo_img = "{T_THEME_PATH}/images/image.png";
+
+/*
+* The array of versions and actions within each.
+* You do not need to order it a specific way (it will be sorted automatically), however, you must enter every version, even if no actions are done for it.
+*
+* You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
+* The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
+*/
+$mod = array(
+	\'name\'		=> \'' . $classname . '\',
+	\'version\'	=> \'' . $version . '\',
+	\'config\'	=> \'' . $classname . '_version\',
+	\'enable\'	=> \'' . $classname . '_enable\',
+);
+
+
+$versions = array(
+
+	\''. $version . '\'	=> array(
+
+
+			\'module_add\' => array(
+				// ACP
+				array(\'acp\', \'ACP_CAT_DOT_MODS\', \'ACP_' . $title . '\'),
+				array(\'acp\', \'ACP_' . $title . '\', array(
+						\'module_basename\'		=> \'' . $classname . '\',
+						\'modes\'					=> array(\'index\'),
+					),
+				),
+
+				// Permissions
+				array(\'acp\', \'ACP_' . $title . '\', array(
+						\'module_basename\'		=> \'' . $classname . '_permissions\',
+						\'modes\'					=> array(\'set_permissions\', \'set_roles\'),
+					),
+				),
+				
+				// Types
+				array(\'acp\', \'ACP_' . $title .'\', array(
+						\'module_basename\'		=> \'' . $classname . '_types\',
+						\'modes\'					=> array(\'manage\'),
+					),
+				),
+
+				// UCP
+				array(\'ucp\', \'\', \'UCP_' . $title . '\'),
+				array(\'ucp\', \'UCP_' . $title . '\', array(
+						\'module_basename\'			=> \'' . $classname . '\',
+						\'modes\'						=> array(\'front\'),
+					),
+				),
+
+				// MCP
+				array(\'mcp\', \'\', \'MCP_' . $title . '\'),
+				array(\'mcp\', \'MCP_' . $title . '\', array(
+						\'module_basename\'	=> \'' . $classname . '\',
+						\'modes\'				=> array(\'index\'),
+					),
+				),
+			),
+		)
+
+	);
+
+// Include the UMIF Auto file and everything else will be handled automatically.
+include($phpbb_root_path . \'umil/umil_auto.\' . $phpEx);';
+		$path = array('root', 'install');
+		$message .= create_path($path);
+		$message .= output_file($install_content, 'install_' . $classname . '.php', implode('/', $path) . '/' );
+
 if($debug == true){
 	output_file($debugInfo, 'debug.php', 'root/');
 }
@@ -332,14 +463,14 @@ $template->assign_vars(array(
 	'PHP_INSTALLER' => (!empty($php_installer)) ? $php_installer : '',
 	'PHPBB_LATEST' => PHPBB_LATEST,
 
-	'S_ERROR_TITLE' => (isset($error['title'])) ? true : false,
-	'S_ERROR_PACKAGE' => (isset($error['package'])) ? true : false,
-	'S_ERROR_VERSION' => (isset($error['version'])) ? true : false,
-	'S_ERROR_TARGET' => (isset($error['target'])) ? true : false,
+	'S_ERROR_TITLE' => (isset($error['title']) && $error['title'] != '') ? true : false,
+	'S_ERROR_PACKAGE' => (isset($error['package']) && $error['package'] != '') ? true : false,
+	'S_ERROR_VERSION' => (isset($error['version']) && $error['version'] != '') ? true : false,
+	'S_ERROR_TARGET' => (isset($error['target']) && $error['target'] != '') ? true : false,
 	'S_ERROR_INSTALL_LEVEL' => (isset($error['install_level'])) ? true : false,
 	'S_ERROR_INSTALL_TIME' => (isset($error['install_time'])) ? true : false,
-	'S_ERROR_AUTHOR' => (isset($error['author'])) ? true : false,
-	'S_ERRORS' => (($submit) && !empty($error)) ? true : false,
+	'S_ERROR_AUTHOR' => (isset($error['author']) && $error['author'] != '') ? true : false,
+	'S_ERRORS' => (($submit) && !$error['error']) ? true : false,
 
 	'S_IS_COPY' => $s_is_copy,
 	'S_IS_DELETE' => $s_is_delete,
